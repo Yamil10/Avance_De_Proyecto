@@ -8,8 +8,8 @@ app.use(cors());
 app.use(express.json());
 
 // CONFIGURACIÓN DIRECTA
-const DB_PASS = "Trapaca10'"; // Tu password de MySQL
-const SECRET_KEY = "mi_clave_secreta_123";
+const DB_PASS = "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp"; // Tu password de MySQL
+const SECRET_KEY = "LolCaballo";
 
 const db = mysql.createConnection({
     host: 'yamabiko.proxy.rlwy.net',
