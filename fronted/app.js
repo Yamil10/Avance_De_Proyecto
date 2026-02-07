@@ -1,6 +1,5 @@
 const API = "https://avance-de-proyecto-cq33.onrender.com/api";
 
-// Cargar al iniciar
 document.addEventListener('DOMContentLoaded', loadTasks);
 
 async function login() {
