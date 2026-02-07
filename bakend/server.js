@@ -12,9 +12,9 @@ const DB_PASS = "Trapaca10'"; // Tu password de MySQL
 const SECRET_KEY = "mi_clave_secreta_123";
 
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: 'yamabiko.proxy.rlwy.net',
     user: 'root',
-    password: "Trapaca10'",
+    password: "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp",
     database: 'Avance_Proyecto'
 });
 
@@ -70,4 +70,5 @@ app.delete('/api/tasks/:id', verificarToken, (req, res) => {
     });
 });
 
-app.listen(3000, () => console.log('Servidor en http://localhost:3000'));
+const PORT = process.env.PORT || 3000; // Usa el puerto que te asigne la nube
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
