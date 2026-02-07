@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// bakend/server.js
+const SECRET_KEY = process.env.SECRET_KEY || "LolCaballo";
 const db = mysql.createConnection({
     host: "yamabiko.proxy.rlwy.net",     // Variable de Railway
     user: "root",     // Variable de Railway
@@ -15,10 +15,6 @@ const db = mysql.createConnection({
     database: "Avance_Proyecto", // Variable de Railway
     port: 49183  // Puerto de Railway
 });
-
-// El puerto del servidor NO debe ser fijo (3000), Render te asigna uno
-const PORT = process.env.PORT || 49183; 
-app.listen(PORT, () => console.log(`Servidor activo en puerto ${PORT}`));
 
 db.connect(err => {
     if (err) console.error("Error DB:", err);
@@ -71,3 +67,5 @@ app.delete('/api/tasks/:id', verificarToken, (req, res) => {
         res.json({ message: "Tarea eliminada" });
     });
 });
+const PORT = process.env.PORT || 10000; 
+app.listen(PORT, () => console.log(`Servidor activo en puerto ${PORT}`));
