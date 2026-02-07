@@ -7,16 +7,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// CONFIGURACIÓN DIRECTA
-const DB_PASS = "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp"; // Tu password de MySQL
-const SECRET_KEY = "LolCaballo";
-
+// bakend/server.js
 const db = mysql.createConnection({
-    host: 'yamabiko.proxy.rlwy.net',
-    user: 'root',
-    password: "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp",
-    database: 'Avance_Proyecto'
+    host: "yamabiko.proxy.rlwy.net",     // Variable de Railway
+    user: "root",     // Variable de Railway
+    password: "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp", // Variable de Railway
+    database: "Avance_Proyecto", // Variable de Railway
+    port: 49183  // Puerto de Railway
 });
+
+// El puerto del servidor NO debe ser fijo (3000), Render te asigna uno
+const PORT = process.env.PORT || 49183; 
+app.listen(PORT, () => console.log(`Servidor activo en puerto ${PORT}`));
 
 db.connect(err => {
     if (err) console.error("Error DB:", err);
@@ -69,6 +71,3 @@ app.delete('/api/tasks/:id', verificarToken, (req, res) => {
         res.json({ message: "Tarea eliminada" });
     });
 });
-
-const PORT = process.env.PORT || 3000; // Usa el puerto que te asigne la nube
-app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
