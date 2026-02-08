@@ -21,23 +21,35 @@ async function login() {
 }
 
 async function loadTasks() {
-    const res = await fetch(`${API}/tasks`);
-    const tasks = await res.json();
-    const container = document.getElementById("taskContainer");
-    container.innerHTML = '';
-    tasks.forEach(t => {
-        container.innerHTML += `
-            <div class="task">
-                <div class="task-info">
-                    <strong>${t.title}</strong><br>
-                    <small>${t.description}</small>
-                </div>
-                <div class="task-actions">
-                    <button class="btn-edit" onclick="prepareEdit(${t.id}, '${t.title}', '${t.description}')">✏️</button>
-                    <button class="btn-del" onclick="deleteTask(${t.id})">X</button>
-                </div>
-            </div>`;
-    });
+    try {
+        const res = await fetch(`${API}/tasks`);
+        if (!res.ok) throw new Error("No se pudo conectar con el servidor");
+        const tasks = await res.json();
+        
+        const container = document.getElementById("taskContainer");
+        container.innerHTML = '';
+
+        if (tasks.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:gray;">No hay tareas guardadas.</p>';
+            return;
+        }
+
+        tasks.forEach(t => {
+            container.innerHTML += `
+                <div class="task">
+                    <div class="task-info">
+                        <strong>${t.title}</strong><br><small>${t.description}</small>
+                    </div>
+                    <div class="task-actions">
+                        <button class="btn-edit" onclick="prepareEdit(${t.id}, '${t.title}', '${t.description}')">✏️</button>
+                        <button class="btn-del" onclick="deleteTask(${t.id})">X</button>
+                    </div>
+                </div>`;
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("taskContainer").innerHTML = "Error al cargar tareas.";
+    }
 }
 
 function prepareEdit(id, title, desc) {
@@ -74,13 +86,13 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
         btn.style.color = "white";
         loadTasks();
     } else {
-        alert("No tienes permiso o hubo un error. Inicia sesión.");
+        alert("Error: Debes iniciar sesión.");
     }
 });
 
 async function deleteTask(id) {
     const token = localStorage.getItem('token');
-    if(!confirm("¿Deseas eliminar esta tarea?")) return;
+    if(!confirm("¿Eliminar esta tarea?")) return;
     
     const res = await fetch(`${API}/tasks/${id}`, {
         method: 'DELETE',
