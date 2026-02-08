@@ -46,9 +46,25 @@ button {
     align-items: center;
 }
 
+.task div {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-edit {
+    background: #ffc107;
+    color: black;
+    width: auto;
+    font-size: 12px;
+    padding: 5px 10px;
+    margin: 0;
+}
+
 .btn-del {
     background: #ff4d4d;
     color: white;
     width: auto;
     font-size: 12px;
+    padding: 5px 10px;
+    margin: 0;
 }

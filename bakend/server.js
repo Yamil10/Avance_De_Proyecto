@@ -67,6 +67,18 @@ app.post('/api/tasks', verificarToken, (req, res) => {
     });
 });
 
+app.put('/api/tasks/:id', verificarToken, (req, res) => {
+    const { id } = req.params;
+    const { title, description } = req.body;
+    if (!title) return res.status(400).json({ error: "El título es obligatorio" });
+
+    const query = "UPDATE tasks SET title = ?, description = ? WHERE id = ?";
+    db.execute(query, [title, description, id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Actualizada" });
+    });
+});
+
 app.delete('/api/tasks/:id', verificarToken, (req, res) => {
     const { id } = req.params;
     db.execute('DELETE FROM tasks WHERE id = ?', [id], (err, result) => {
