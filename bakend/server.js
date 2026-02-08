@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const SECRET_KEY = process.env.SECRET_KEY || "mi_clave_secreta_super_segura";
+const SECRET_KEY = process.env.SECRET_KEY || "Lolcaballo";
 
 const db = mysql.createConnection({
     host: "yamabiko.proxy.rlwy.net",     
@@ -37,7 +37,7 @@ const verificarToken = (req, res, next) => {
 
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    if (username === "Yamil" && password === "Trapaca10'") {
+    if (username === "Yamil/Sebastian" && password === "Equipo") {
         const token = jwt.sign({ user: username }, SECRET_KEY, { expiresIn: '2h' });
         res.json({ token });
     } else {

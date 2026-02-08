@@ -2,7 +2,6 @@ const API = "/api";
 let listaTareas = [];
 
 document.addEventListener('DOMContentLoaded', loadTasks);
-
 async function login() {
     const user = prompt("Usuario:");
     const pass = prompt("Contraseña:");
