@@ -3,12 +3,11 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const SECRET_KEY = process.env.SECRET_KEY || "mi_clave_secreta_super_segura";
+const SECRET_KEY = process.env.SECRET_KEY || "LolCaballo";
 
 const db = mysql.createConnection({
     host: "yamabiko.proxy.rlwy.net",     
@@ -25,6 +24,12 @@ db.connect(err => {
         console.log('Conectado a MySQL');
     }
 });
+
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.static(path.join(__dirname, '../fronted')));
 
