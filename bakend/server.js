@@ -5,61 +5,60 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 
 const app = express();
-
-// 1. CONFIGURACIÓN DE CORS (DEBE IR ANTES QUE LAS RUTAS)
-app.use(cors({
-    origin: '*', 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+app.use(cors());
 app.use(express.json());
 
-const SECRET_KEY = process.env.SECRET_KEY || "LolCaballo";
+// --- CONFIGURACIÓN ---
+const SECRET_KEY = process.env.SECRET_KEY || "mi_clave_secreta_super_segura";
 
-// 2. CONEXIÓN A LA BASE DE DATOS
+// Conexión a la Base de Datos (Datos de Railway)
 const db = mysql.createConnection({
     host: "yamabiko.proxy.rlwy.net",     
     user: "root",     
-    password: "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp", 
+    password: "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp", // Tu contraseña real
     database: "Avance_Proyecto", 
     port: 49183  
 });
 
 db.connect(err => {
     if (err) {
-        console.error("Error de conexión a MySQL:", err);
+        console.error("Error conectando a Railway:", err);
     } else {
-        console.log('Conectado a MySQL exitosamente');
+        console.log('✅ Conectado a MySQL en Railway');
     }
 });
 
-// 3. ARCHIVOS ESTÁTICOS (Asegúrate que la carpeta se llame 'fronted')
+// --- SERVIR ARCHIVOS DEL FRONTEND ---
+// Esto hace que tu página se vea al entrar a la URL de Render
 app.use(express.static(path.join(__dirname, '../fronted')));
 
-// 4. MIDDLEWARE DE AUTENTICACIÓN
+// --- MIDDLEWARE DE SEGURIDAD (El Guardia) ---
 const verificarToken = (req, res, next) => {
     const token = req.headers['authorization'];
-    if (!token) return res.status(403).json({ error: "No autorizado" });
+    if (!token) return res.status(403).json({ error: "Acceso denegado: Falta token" });
 
     jwt.verify(token, SECRET_KEY, (err, decoded) => {
-        if (err) return res.status(401).json({ error: "Token inválido" });
+        if (err) return res.status(401).json({ error: "Token inválido o expirado" });
         req.user = decoded;
         next();
     });
 };
 
-// 5. RUTAS DE LA API
+// --- RUTAS DE LA API ---
+
+// 1. Iniciar Sesión
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    if (username === "Yamil/Sebastian" && password === "Equipo") {
+    // Usuario y contraseña fijos para este ejemplo
+    if (username === "Yamil" && password === "Trapaca10'") {
         const token = jwt.sign({ user: username }, SECRET_KEY, { expiresIn: '2h' });
         res.json({ token });
     } else {
-        res.status(401).json({ error: "Credenciales incorrectas" });
+        res.status(401).json({ error: "Usuario o contraseña incorrectos" });
     }
 });
 
+// 2. Obtener Tareas (Público)
 app.get('/api/tasks', (req, res) => {
     db.execute('SELECT * FROM tasks ORDER BY created_at DESC', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -67,6 +66,7 @@ app.get('/api/tasks', (req, res) => {
     });
 });
 
+// 3. Crear Tarea (Protegido)
 app.post('/api/tasks', verificarToken, (req, res) => { 
     const { title, description } = req.body;
     if (!title) return res.status(400).json({ error: "El título es obligatorio" });
@@ -74,37 +74,27 @@ app.post('/api/tasks', verificarToken, (req, res) => {
     const query = "INSERT INTO tasks(title, description) VALUES (?, ?)";
     db.execute(query, [title, description], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ message: "Creada" });
+        res.status(201).json({ message: "Tarea creada", id: result.insertId });
     });
 });
 
-app.put('/api/tasks/:id', verificarToken, (req, res) => {
-    const { id } = req.params;
-    const { title, description } = req.body;
-    if (!title) return res.status(400).json({ error: "El título es obligatorio" });
-
-    const query = "UPDATE tasks SET title = ?, description = ? WHERE id = ?";
-    db.execute(query, [title, description, id], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ message: "Actualizada" });
-    });
-});
-
+// 4. Eliminar Tarea (Protegido)
 app.delete('/api/tasks/:id', verificarToken, (req, res) => {
     const { id } = req.params;
     db.execute('DELETE FROM tasks WHERE id = ?', [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ message: "Eliminada" });
+        res.json({ message: "Tarea eliminada" });
     });
 });
 
-// REDIRECCIÓN PARA RUTAS NO DEFINIDAS
+// --- RUTA FINAL PARA EL FRONTEND ---
+// Cualquier ruta que no sea API, devuelve el index.html
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../fronted', 'index.html'));
 });
 
-// 6. INICIO DEL SERVIDOR
+// --- INICIAR SERVIDOR ---
 const PORT = process.env.PORT || 10000; 
 app.listen(PORT, () => {
-    console.log(`Servidor en puerto ${PORT}`);
+    console.log(`🚀 Servidor activo en puerto ${PORT}`);
 });

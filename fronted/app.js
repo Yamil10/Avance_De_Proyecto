@@ -1,103 +1,121 @@
 const API = "https://avance-de-proyecto-cq33.onrender.com/api";
-let editId = null;
 
+// Cargar las tareas apenas abra la página
 document.addEventListener('DOMContentLoaded', loadTasks);
 
+// --- FUNCIÓN DE LOGIN ---
 async function login() {
-    const user = prompt("Usuario:");
-    const pass = prompt("Contraseña:");
-    const res = await fetch(`${API}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user, password: pass })
-    });
-    const data = await res.json();
-    if (data.token) {
-        localStorage.setItem('token', data.token);
-        alert("¡Logueado!");
-    } else {
-        alert("Error de acceso");
+    const user = prompt("Ingresa tu usuario:");
+    const pass = prompt("Ingresa tu contraseña:");
+
+    if (!user || !pass) return;
+
+    try {
+        const res = await fetch(`${API}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user, password: pass })
+        });
+
+        const data = await res.json();
+
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            alert("✅ ¡Inicio de sesión exitoso!");
+        } else {
+            alert("❌ Error: " + (data.error || "Credenciales incorrectas"));
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión con el servidor");
     }
 }
 
+// --- FUNCIÓN PARA CARGAR TAREAS (Pública) ---
 async function loadTasks() {
     try {
         const res = await fetch(`${API}/tasks`);
-        if (!res.ok) throw new Error("No se pudo conectar con el servidor");
         const tasks = await res.json();
         
         const container = document.getElementById("taskContainer");
-        container.innerHTML = '';
+        container.innerHTML = ''; // Limpiar antes de cargar
 
         if (tasks.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:gray;">No hay tareas guardadas.</p>';
+            container.innerHTML = '<p style="text-align:center; color:#999;">No hay tareas pendientes.</p>';
             return;
         }
 
         tasks.forEach(t => {
             container.innerHTML += `
                 <div class="task">
-                    <div class="task-info">
-                        <strong>${t.title}</strong><br><small>${t.description}</small>
+                    <div>
+                        <strong>${t.title}</strong>
+                        <small>${t.description}</small>
                     </div>
-                    <div class="task-actions">
-                        <button class="btn-edit" onclick="prepareEdit(${t.id}, '${t.title}', '${t.description}')">✏️</button>
-                        <button class="btn-del" onclick="deleteTask(${t.id})">X</button>
-                    </div>
+                    <button class="btn-del" onclick="deleteTask(${t.id})">Eliminar</button>
                 </div>`;
         });
     } catch (error) {
-        console.error("Error:", error);
-        document.getElementById("taskContainer").innerHTML = "Error al cargar tareas.";
+        console.error("Error cargando tareas:", error);
     }
 }
 
-function prepareEdit(id, title, desc) {
-    editId = id;
-    document.getElementById('title').value = title;
-    document.getElementById('desc').value = desc;
-    const btn = document.querySelector('.btn-add');
-    btn.innerText = "Guardar Cambios";
-    btn.style.background = "#ffc107";
-    btn.style.color = "#212529";
-}
-
+// --- FUNCIÓN PARA AGREGAR TAREA (Protegida) ---
 document.getElementById('taskForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
     const token = localStorage.getItem('token');
+    if (!token) {
+        alert("🔒 Debes iniciar sesión para agregar tareas.");
+        return;
+    }
+
     const title = document.getElementById('title').value;
-    const description = document.getElementById('desc').value;
+    const desc = document.getElementById('desc').value;
 
-    const method = editId ? 'PUT' : 'POST';
-    const url = editId ? `${API}/tasks/${editId}` : `${API}/tasks`;
+    try {
+        const res = await fetch(`${API}/tasks`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': token 
+            },
+            body: JSON.stringify({ title: title, description: desc })
+        });
 
-    const res = await fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json', 'Authorization': token },
-        body: JSON.stringify({ title, description })
-    });
-
-    if (res.ok) {
-        editId = null;
-        document.getElementById('taskForm').reset();
-        const btn = document.querySelector('.btn-add');
-        btn.innerText = "Agregar Tarea";
-        btn.style.background = "#28a745";
-        btn.style.color = "white";
-        loadTasks();
-    } else {
-        alert("Error: Debes iniciar sesión.");
+        if (res.ok) {
+            document.getElementById('taskForm').reset();
+            loadTasks(); // Recargar la lista
+        } else {
+            alert("No autorizado o sesión expirada.");
+        }
+    } catch (error) {
+        console.error(error);
     }
 });
 
+// --- FUNCIÓN PARA BORRAR TAREA (Protegida) ---
 async function deleteTask(id) {
     const token = localStorage.getItem('token');
-    if(!confirm("¿Eliminar esta tarea?")) return;
-    
-    const res = await fetch(`${API}/tasks/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': token }
-    });
-    if (res.ok) loadTasks();
-    else alert("Error al eliminar.");
+    if (!token) {
+        alert("🔒 Debes iniciar sesión para eliminar tareas.");
+        return;
+    }
+
+    if (!confirm("¿Seguro que deseas eliminar esta tarea?")) return;
+
+    try {
+        const res = await fetch(`${API}/tasks/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': token }
+        });
+
+        if (res.ok) {
+            loadTasks();
+        } else {
+            alert("No se pudo eliminar (verifica tu sesión).");
+        }
+    } catch (error) {
+        console.error(error);
+    }
 }

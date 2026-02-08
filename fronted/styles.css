@@ -1,91 +1,109 @@
-body {
-    font-family: sans-serif;
-    max-width: 500px;
-    margin: 40px auto;
-    background: #eee;
+/* Configuración General */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background-color: #f4f4f9; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    margin: 0; 
 }
 
-.box {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+/* Caja Principal (UI/UX) */
+.box { 
+    background: white; 
+    padding: 2rem; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    width: 100%; 
+    max-width: 400px; 
 }
 
-h2 {
-    margin-top: 0;
-    color: #333;
+h2 { 
+    text-align: center; 
+    color: #333; 
+    margin-bottom: 1.5rem; 
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+/* Inputs y Formularios */
+input { 
+    width: 100%; 
+    padding: 10px; 
+    margin: 8px 0; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: 0.3s;
+/* Estilos de Botones */
+button { 
+    width: 100%; 
+    padding: 10px; 
+    margin-top: 10px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    transition: 0.3s; 
 }
 
-.btn-login {
-    background: #007bff;
-    color: white;
-    margin-bottom: 20px;
+.btn-login { 
+    background-color: #007bff; 
+    color: white; 
 }
 
-.btn-add {
-    background: #28a745;
-    color: white;
-    margin-top: 10px;
+.btn-login:hover { 
+    background-color: #0056b3; 
 }
 
-.task {
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.btn-add { 
+    background-color: #28a745; 
+    color: white; 
 }
 
-.task-info {
-    flex-grow: 1;
+.btn-add:hover { 
+    background-color: #218838; 
 }
 
-.task-actions {
-    display: flex;
-    gap: 8px;
+/* Lista de Tareas Dinámicas */
+.task { 
+    background: #fff; 
+    border-bottom: 1px solid #eee; 
+    padding: 10px 0; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
 }
 
-.btn-edit, .btn-del {
-    width: 35px;
-    height: 35px;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
+.task div { 
+    max-width: 80%; 
 }
 
-.btn-edit {
-    background: #ffc107;
-    color: #212529;
+.task strong { 
+    display: block; 
+    color: #444; 
 }
 
-.btn-del {
-    background: #ff4d4d;
-    color: white;
+.task small { 
+    color: #888; 
 }
 
-button:hover {
-    opacity: 0.85;
+/* Botón Eliminar */
+.btn-del { 
+    background-color: #dc3545; 
+    color: white; 
+    width: auto; 
+    padding: 5px 10px; 
+    font-size: 0.8rem; 
+    margin: 0; 
+}
+
+.btn-del:hover { 
+    background-color: #c82333; 
+}
+
+hr { 
+    margin: 20px 0; 
+    border: 0; 
+    border-top: 1px solid #eee; 
 }

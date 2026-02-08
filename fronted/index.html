@@ -2,21 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mis Tareas</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Tareas</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="box">
-        <h2>Gestor de Tareas</h2>
-        <button class="btn-login" onclick="login()">Iniciar Sesión</button>
 
-        <div id="taskContainer">Cargando...</div>
+    <div class="box">
+        <h2>📋 Mis Tareas</h2>
+        
+        <button class="btn-login" onclick="login()">🔑 Iniciar Sesión</button>
+        
+        <hr>
+
+        <div id="taskContainer">
+            <p style="text-align:center; color:#999;">Cargando tareas...</p>
+        </div>
 
         <hr>
 
         <form id="taskForm">
-            <input type="text" id="title" placeholder="Título" required>
-            <input type="text" id="desc" placeholder="Descripción" required>
+            <input type="text" id="title" placeholder="Título de la tarea" required>
+            <input type="text" id="desc" placeholder="Descripción (opcional)" required>
             <button type="submit" class="btn-add">Agregar Tarea</button>
         </form>
     </div>
