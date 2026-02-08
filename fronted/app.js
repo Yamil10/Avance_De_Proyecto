@@ -1,4 +1,4 @@
-const API = "https://avance-de-proyecto-cq33.onrender.com/api";
+const API = "/api";
 
 // Cargar las tareas apenas abra la página
 document.addEventListener('DOMContentLoaded', loadTasks);
