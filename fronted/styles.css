@@ -12,59 +12,80 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
 input {
     width: 100%;
-    padding: 8px;
-    margin: 5px 0;
+    padding: 10px;
+    margin: 8px 0;
     box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     cursor: pointer;
     border: none;
     border-radius: 4px;
-    margin-top: 10px;
-}
-
-.btn-add {
-    background: #28a745;
-    color: white;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
 .btn-login {
     background: #007bff;
     color: white;
+    margin-bottom: 20px;
+}
+
+.btn-add {
+    background: #28a745;
+    color: white;
+    margin-top: 10px;
 }
 
 .task {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.task div {
+.task-info {
+    flex-grow: 1;
+}
+
+.task-actions {
     display: flex;
-    gap: 5px;
+    gap: 8px;
+}
+
+.btn-edit, .btn-del {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
 }
 
 .btn-edit {
     background: #ffc107;
-    color: black;
-    width: auto;
-    font-size: 12px;
-    padding: 5px 10px;
-    margin: 0;
+    color: #212529;
 }
 
 .btn-del {
     background: #ff4d4d;
     color: white;
-    width: auto;
-    font-size: 12px;
-    padding: 5px 10px;
-    margin: 0;
+}
+
+button:hover {
+    opacity: 0.85;
 }
