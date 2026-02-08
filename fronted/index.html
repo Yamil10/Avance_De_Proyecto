@@ -7,27 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="box">
         <h2>📋 Mis Tareas</h2>
-        
         <button class="btn-login" onclick="login()">🔑 Iniciar Sesión</button>
-        
         <hr>
-
         <div id="taskContainer">
             <p style="text-align:center; color:#999;">Cargando tareas...</p>
         </div>
-
         <hr>
-
         <form id="taskForm">
             <input type="text" id="title" placeholder="Título de la tarea" required>
-            <input type="text" id="desc" placeholder="Descripción (opcional)" required>
+            <input type="text" id="desc" placeholder="Descripción" required>
             <button type="submit" class="btn-add">Agregar Tarea</button>
         </form>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
