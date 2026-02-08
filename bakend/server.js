@@ -3,8 +3,16 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+
 const app = express();
-app.use(cors());
+
+// Configuración de CORS al principio para evitar bloqueos
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 const SECRET_KEY = process.env.SECRET_KEY || "LolCaballo";
@@ -19,18 +27,13 @@ const db = mysql.createConnection({
 
 db.connect(err => {
     if (err) {
-        console.error("Error:", err);
+        console.error("Error de conexión a DB:", err);
     } else {
-        console.log('Conectado a MySQL');
+        console.log('Conectado a MySQL exitosamente');
     }
 });
 
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+// Servir archivos estáticos (Asegúrate que la carpeta se llame 'fronted' como en tu código)
 app.use(express.static(path.join(__dirname, '../fronted')));
 
 const verificarToken = (req, res, next) => {
