@@ -6,9 +6,9 @@ const path = require('path');
 
 const app = express();
 
-// Configuración de CORS al principio para evitar bloqueos
+// 1. CONFIGURACIÓN DE CORS (DEBE IR ANTES QUE LAS RUTAS)
 app.use(cors({
-    origin: '*',
+    origin: '*', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -17,6 +17,7 @@ app.use(express.json());
 
 const SECRET_KEY = process.env.SECRET_KEY || "LolCaballo";
 
+// 2. CONEXIÓN A LA BASE DE DATOS
 const db = mysql.createConnection({
     host: "yamabiko.proxy.rlwy.net",     
     user: "root",     
@@ -27,15 +28,16 @@ const db = mysql.createConnection({
 
 db.connect(err => {
     if (err) {
-        console.error("Error de conexión a DB:", err);
+        console.error("Error de conexión a MySQL:", err);
     } else {
         console.log('Conectado a MySQL exitosamente');
     }
 });
 
-// Servir archivos estáticos (Asegúrate que la carpeta se llame 'fronted' como en tu código)
+// 3. ARCHIVOS ESTÁTICOS (Asegúrate que la carpeta se llame 'fronted')
 app.use(express.static(path.join(__dirname, '../fronted')));
 
+// 4. MIDDLEWARE DE AUTENTICACIÓN
 const verificarToken = (req, res, next) => {
     const token = req.headers['authorization'];
     if (!token) return res.status(403).json({ error: "No autorizado" });
@@ -47,6 +49,7 @@ const verificarToken = (req, res, next) => {
     });
 };
 
+// 5. RUTAS DE LA API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     if (username === "Yamil/Sebastian" && password === "Equipo") {
@@ -95,10 +98,12 @@ app.delete('/api/tasks/:id', verificarToken, (req, res) => {
     });
 });
 
+// REDIRECCIÓN PARA RUTAS NO DEFINIDAS
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../fronted', 'index.html'));
 });
 
+// 6. INICIO DEL SERVIDOR
 const PORT = process.env.PORT || 10000; 
 app.listen(PORT, () => {
     console.log(`Servidor en puerto ${PORT}`);
