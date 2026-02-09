@@ -8,14 +8,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const SECRET_KEY = process.env.SECRET_KEY || "Lolcaballo";
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const db = mysql.createConnection({
-    host: "yamabiko.proxy.rlwy.net",     
-    user: "root",     
-    password: "xOSAGQINSjGpuZLGXydRTKIfKDJNzALp", 
-    database: "Avance_Proyecto", 
-    port: 49183  
+    host: process.env.DB_HOST,     
+    user: process.env.DB_USER,     
+    password: process.env.DB_PASSWORD, 
+    database: process.env.DB_NAME, 
+    port: process.env.DB_PORT  
 });
 
 db.connect(err => {
