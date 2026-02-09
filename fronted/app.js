@@ -1,23 +1,46 @@
-const API = "/api";
+const API = "/api"; 
 let listaTareas = [];
 
-document.addEventListener('DOMContentLoaded', loadTasks);
-async function login() {
-    const user = prompt("Usuario:");
-    const pass = prompt("Contraseña:");
-    if (!user || !pass) return;
+document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if(token) toggleView(true);
+    else toggleView(false);
+    loadTasks();
+});
+
+function toggleView(isLoggedIn) {
+    const loginSection = document.getElementById('loginSection');
+    const mainApp = document.getElementById('mainApp');
+    if (isLoggedIn) {
+        loginSection.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+    } else {
+        loginSection.classList.remove('hidden');
+        mainApp.classList.add('hidden');
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUser').value;
+    const password = document.getElementById('loginPass').value;
     const res = await fetch(`${API}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user, password: pass })
+        body: JSON.stringify({ username, password })
     });
     const data = await res.json();
     if (data.token) {
         localStorage.setItem('token', data.token);
-        alert("¡Logueado!");
+        toggleView(true);
     } else {
-        alert("Error de acceso");
+        alert("Acceso denegado");
     }
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    toggleView(false);
 }
 
 async function loadTasks() {
@@ -40,21 +63,6 @@ async function loadTasks() {
     });
 }
 
-async function editTask(id) {
-    const token = localStorage.getItem('token');
-    if (!token) return alert("Inicia sesión");
-    const tarea = listaTareas.find(t => t.id === id);
-    const nuevoT = prompt("Nuevo título:", tarea.title);
-    const nuevaD = prompt("Nueva descripción:", tarea.description);
-    if (!nuevoT) return;
-    const res = await fetch(`${API}/tasks/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': token },
-        body: JSON.stringify({ title: nuevoT, description: nuevaD })
-    });
-    if (res.ok) loadTasks();
-}
-
 document.getElementById('taskForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -70,9 +78,24 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
         document.getElementById('taskForm').reset();
         loadTasks();
     } else {
-        alert("Error de permiso");
+        alert("No autorizado");
     }
 });
+
+async function editTask(id) {
+    const token = localStorage.getItem('token');
+    if (!token) return alert("Inicia sesión");
+    const tarea = listaTareas.find(t => t.id === id);
+    const nuevoT = prompt("Nuevo título:", tarea.title);
+    const nuevaD = prompt("Nueva descripción:", tarea.description);
+    if (!nuevoT) return;
+    const res = await fetch(`${API}/tasks/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': token },
+        body: JSON.stringify({ title: nuevoT, description: nuevaD })
+    });
+    if (res.ok) loadTasks();
+}
 
 async function deleteTask(id) {
     const token = localStorage.getItem('token');

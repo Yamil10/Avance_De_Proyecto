@@ -11,33 +11,60 @@ body {
 .box { 
     background: white; 
     padding: 2rem; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    border-radius: 12px; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
     width: 100%; 
-    max-width: 400px; 
+    max-width: 450px; 
 }
 
-h2 { 
+h2, h3 { 
     text-align: center; 
     color: #333; 
-    margin-bottom: 1.5rem; 
+    margin-bottom: 1rem; 
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-muted {
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.loading-text {
+    text-align: center; 
+    color: #999;
+    padding: 1rem;
+}
+
+.divider { 
+    margin: 20px 0; 
+    border: 0; 
+    border-top: 1px solid #eee; 
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 input { 
     width: 100%; 
-    padding: 10px; 
-    margin: 8px 0; 
+    padding: 12px; 
     border: 1px solid #ddd; 
-    border-radius: 5px; 
+    border-radius: 8px; 
     box-sizing: border-box; 
 }
 
 button { 
     width: 100%; 
-    padding: 10px; 
-    margin-top: 10px; 
+    padding: 12px; 
     border: none; 
-    border-radius: 5px; 
+    border-radius: 8px; 
     cursor: pointer; 
     font-weight: bold; 
     transition: 0.3s; 
@@ -48,56 +75,59 @@ button {
     color: white; 
 }
 
-.btn-login:hover { 
-    background-color: #0056b3; 
-}
-
 .btn-add { 
     background-color: #28a745; 
     color: white; 
 }
 
-.btn-add:hover { 
-    background-color: #218838; 
-}
-
-.task { 
-    background: #fff; 
-    border-bottom: 1px solid #eee; 
-    padding: 10px 0; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-}
-
-.task div { 
-    max-width: 80%; 
-}
-
-.task strong { 
-    display: block; 
-    color: #444; 
-}
-
-.task small { 
-    color: #888; 
+.btn-logout { 
+    background-color: #6c757d; 
+    color: white; 
+    width: auto; 
+    padding: 5px 15px;
+    font-size: 0.85rem;
 }
 
 .btn-del { 
     background-color: #dc3545; 
     color: white; 
     width: auto; 
-    padding: 5px 10px; 
-    font-size: 0.8rem; 
-    margin: 0; 
+    padding: 6px 12px; 
 }
 
-.btn-del:hover { 
-    background-color: #c82333; 
+.btn-edit {
+    background-color: #ffc107;
+    color: #333;
+    width: auto;
+    padding: 6px 12px;
+    margin-right: 5px;
 }
 
-hr { 
-    margin: 20px 0; 
-    border: 0; 
-    border-top: 1px solid #eee; 
+.logout-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.task { 
+    background: #fff; 
+    border-bottom: 1px solid #f0f0f0; 
+    padding: 15px 5px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.task-info strong { 
+    display: block; 
+    color: #444; 
+}
+
+.task-info small { 
+    color: #888; 
 }

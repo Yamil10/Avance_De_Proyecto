@@ -20,7 +20,6 @@ const db = mysql.createConnection({
 
 db.connect(err => {
     if (err) console.error(err);
-    else console.log('Conectado a MySQL');
 });
 
 app.use(express.static(path.join(__dirname, '../fronted')));
@@ -81,4 +80,4 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000; 
-app.listen(PORT, () => console.log(`Puerto ${PORT}`));
+app.listen(PORT);

@@ -8,18 +8,34 @@
 </head>
 <body>
     <div class="box">
-        <h2>📋 Mis Tareas</h2>
-        <button class="btn-login" onclick="login()">Iniciar Sesión</button>
-        <hr>
-        <div id="taskContainer">
-            <p style="text-align:center; color:#999;">Cargando tareas...</p>
+        <h2>📋 Gestor de Tareas</h2>
+        
+        <div id="loginSection" class="login-container">
+            <h3>Iniciar Sesión</h3>
+            <p class="text-muted">Ingresa tus credenciales para gestionar tareas</p>
+            <form onsubmit="handleLogin(event)" class="form-group">
+                <input type="text" id="loginUser" placeholder="Usuario" required>
+                <input type="password" id="loginPass" placeholder="Contraseña" required>
+                <button type="submit" class="btn-login">Entrar</button>
+            </form>
         </div>
-        <hr>
-        <form id="taskForm">
-            <input type="text" id="title" placeholder="Título de la tarea" required>
-            <input type="text" id="desc" placeholder="Descripción" required>
-            <button type="submit" class="btn-add">Agregar Tarea</button>
-        </form>
+
+        <div id="mainApp" class="app-container hidden">
+            <div class="logout-container">
+                <span>Sesión Activa</span>
+                <button onclick="logout()" class="btn-logout">Cerrar Sesión</button>
+            </div>
+            <hr class="divider">
+            <div id="taskContainer" class="task-list">
+                <p class="loading-text">Cargando tareas...</p>
+            </div>
+            <hr class="divider">
+            <form id="taskForm" class="form-group">
+                <input type="text" id="title" placeholder="Título de la tarea" required>
+                <input type="text" id="desc" placeholder="Descripción" required>
+                <button type="submit" class="btn-add">Agregar Tarea</button>
+            </form>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>
