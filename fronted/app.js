@@ -59,7 +59,7 @@ async function loadTasks() {
     const isUserLoggedIn = localStorage.getItem('token');
 
     if(listaTareas.length === 0) {
-        container.innerHTML = '<p class="loading-text">No hay tareas pendientes.</p>';
+        container.innerHTML = '<p class="loading-text">No hay Productos</p>';
         return;
     }
 
@@ -97,7 +97,7 @@ document.getElementById('taskForm').addEventListener('submit', async (e) => {
         document.getElementById('taskForm').reset();
         loadTasks();
     } else {
-        alert("Error al crear tarea");
+        alert("Error al agregar el producto");
     }
 });
 
@@ -106,8 +106,8 @@ async function editTask(id) {
     if (!token) return; 
     
     const tarea = listaTareas.find(t => t.id === id);
-    const nuevoT = prompt("Nuevo título:", tarea.title);
-    const nuevaD = prompt("Nueva descripción:", tarea.description);
+    const nuevoT = prompt("Nuevo Producto:", tarea.title);
+    const nuevaD = prompt("Cantidad:", tarea.description);
     
     if (!nuevoT) return;
     
@@ -122,7 +122,7 @@ async function editTask(id) {
 
 async function deleteTask(id) {
     const token = localStorage.getItem('token');
-    if (!token || !confirm("¿Borrar tarea?")) return;
+    if (!token || !confirm("¿Borrar Producto?")) return;
     
     const res = await fetch(`${API}/tasks/${id}`, {
         method: 'DELETE',
