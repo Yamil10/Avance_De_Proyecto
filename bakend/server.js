@@ -76,7 +76,7 @@ app.delete('/api/tasks/:id', verificarToken, (req, res) => {
     });
 });
 
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../fronted', 'index.html'));
 });
 
