@@ -10,9 +10,15 @@
     <div class="box">
         <h2>📋 Gestor de Tareas</h2>
         
+        <div id="taskContainer" class="task-list">
+            <p class="loading-text">Cargando tareas...</p>
+        </div>
+
+        <hr class="divider">
+
         <div id="loginSection" class="login-container">
             <h3>Iniciar Sesión</h3>
-            <p class="text-muted">Ingresa tus credenciales para gestionar tareas</p>
+            <p class="text-muted">Ingresa para editar o crear tareas</p>
             <form onsubmit="handleLogin(event)" class="form-group">
                 <input type="text" id="loginUser" placeholder="Usuario" required>
                 <input type="password" id="loginPass" placeholder="Contraseña" required>
@@ -20,16 +26,15 @@
             </form>
         </div>
 
-        <div id="mainApp" class="app-container hidden">
+        <div id="adminPanel" class="hidden">
             <div class="logout-container">
-                <span>Sesión Activa</span>
+                <span class="session-active">● Sesión Activa</span>
                 <button onclick="logout()" class="btn-logout">Cerrar Sesión</button>
             </div>
+            
             <hr class="divider">
-            <div id="taskContainer" class="task-list">
-                <p class="loading-text">Cargando tareas...</p>
-            </div>
-            <hr class="divider">
+            
+            <h3>Nueva Tarea</h3>
             <form id="taskForm" class="form-group">
                 <input type="text" id="title" placeholder="Título de la tarea" required>
                 <input type="text" id="desc" placeholder="Descripción" required>
